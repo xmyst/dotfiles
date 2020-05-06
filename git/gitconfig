@@ -1,0 +1,15 @@
+[alias]
+	br = branch
+	ci = commit
+	co = checkout
+	di = diff
+	lg = log --graph --oneline
+	ls = ls-files
+	st = status
+[diff]
+	algorithm = histogram
+[transfer]
+	fsckObjects = true
+[user]
+	name = Stas Miasnikoŭ
+	email = miasnikou@yandex.by
