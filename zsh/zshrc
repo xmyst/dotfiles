@@ -7,15 +7,3 @@ alias m='more -Ss'
 
 alias ls='ls -F'
 alias ll='ls -l'
-
-case $(uname) in
-  Darwin)
-    alias hd='hexdump -C'
-    alias lx='ll -%@Oe'
-    ;;
-  FreeBSD)
-    alias lx='ll -o'
-    ;;
-esac
-
-# Vim: set et sw=2:
