@@ -3,7 +3,7 @@
 	ci = commit
 	co = checkout
 	di = diff
-	lg = log -n 20 --graph --oneline
+	lg = log -n10 --graph --oneline
 	ls = ls-files
 	st = status
 [diff]
