@@ -8,6 +8,10 @@ die () {
 	exit 1
 }
 
+warn () {
+	echo "$progname: $1" >&2
+}
+
 usage () {
 	echo "usage: $progname {diff|install|pick|update} [<item>...]" >&2
 	exit 0
@@ -34,12 +38,12 @@ cmd_install () {
 			homepath="$HOME/$homepath"
 			if test ! -r "$repopath"
 			then
-				echo "cannot read file '$repopath'. Skipping." >&2
+				warn "cannot read file '$repopath'. Skipping."
 				continue
 			fi
 			if test -e "$homepath"
 			then
-				echo "file '$homepath' already exists. Skipping." >&2
+				warn "file '$homepath' already exists. Skipping."
 				continue
 			fi
 			mkdir -p "${homepath%/*}"
@@ -59,7 +63,7 @@ cmd_pick () {
 			# since we can read the manifest from it.
 			if ! test -r "$homepath"
 			then
-				echo "cannot read file '$homepath'. Skipping." >&2
+				warn "cannot read file '$homepath'. Skipping."
 				continue
 			fi
 			cp "$homepath" "$repopath"
@@ -76,12 +80,12 @@ cmd_update () {
 			homepath="$HOME/$homepath"
 			if test ! -r "$repopath"
 			then
-				echo "cannot read file '$repopath'. Skipping." >&2
+				warn "cannot read file '$repopath'. Skipping."
 				continue
 			fi
 			if test ! -w "$homepath"
 			then
-				echo "cannot write file '$homepath'. Skipping." >&2
+				warn "cannot write file '$homepath'. Skipping."
 				continue
 			fi
 			cp "$repopath" "$homepath"
