@@ -36,11 +36,6 @@ cmd_install () {
 		do
 			repopath="$DOT_REPO_DIR/$repopath"
 			homepath="$HOME/$homepath"
-			if test ! -r "$repopath"
-			then
-				warn "cannot read file '$repopath'. Skipping."
-				continue
-			fi
 			if test -e "$homepath"
 			then
 				warn "file '$homepath' already exists. Skipping."
@@ -60,12 +55,7 @@ cmd_pick () {
 			repopath="$DOT_REPO_DIR/$repopath"
 			homepath="$HOME/$homepath"
 			# At least `dirname "$repopath"` should exist,
-			# since we can read the manifest from it.
-			if ! test -r "$homepath"
-			then
-				warn "cannot read file '$homepath'. Skipping."
-				continue
-			fi
+			# we are reading the manifest from there.
 			cp "$homepath" "$repopath"
 		done <"$DOT_REPO_DIR/$item/manifest"
 	done
@@ -78,11 +68,6 @@ cmd_update () {
 		do
 			repopath="$DOT_REPO_DIR/$repopath"
 			homepath="$HOME/$homepath"
-			if test ! -r "$repopath"
-			then
-				warn "cannot read file '$repopath'. Skipping."
-				continue
-			fi
 			if test ! -w "$homepath"
 			then
 				warn "cannot write file '$homepath'. Skipping."
