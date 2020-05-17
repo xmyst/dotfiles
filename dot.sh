@@ -2,6 +2,7 @@
 
 : ${DOT_REPO_DIR:=$HOME/Projects/dotfiles}
 progname="${0##*/}"
+sysname=$(uname | tr "[:upper:]" "[:lower:]")
 
 die () {
 	echo "$progname: $1" >&2
@@ -24,7 +25,8 @@ cmd_diff () {
 		do
 			repofile="$DOT_REPO_DIR/$repofile"
 			homefile="$HOME/$homefile"
-			git diff "$repofile" "$homefile"
+			reposysfile="$repofile.$sysname"
+			cat "$repofile" "$reposysfile" 2>/dev/null | git diff --no-index - "$homefile"
 		done <"$DOT_REPO_DIR/$item/manifest"
 	done
 }
@@ -41,8 +43,9 @@ cmd_install () {
 				warn "file '$homefile' already exists. Skipping."
 				continue
 			fi
+			reposysfile="$repofile.$sysname"
 			mkdir -p "${homefile%/*}"
-			cp "$repofile" "$homefile"
+			cat "$repofile" "$reposysfile" >"$homefile" 2>/dev/null
 		done <"$DOT_REPO_DIR/$item/manifest"
 	done
 }
@@ -56,7 +59,13 @@ cmd_pick () {
 			homefile="$HOME/$homefile"
 			# At least `dirname "$repofile"` should exist,
 			# we are reading the manifest from there.
-			cp "$homefile" "$repofile"
+			if ls "$repofile".* 2>/dev/null >&2
+			then
+				warn "file '$repofile' has system-specific part(s)."
+				warn "\tThose are not supported yet. Skipping."
+			else
+				cp "$homefile" "$repofile"
+			fi
 		done <"$DOT_REPO_DIR/$item/manifest"
 	done
 }
@@ -73,7 +82,8 @@ cmd_update () {
 				warn "cannot write file '$homefile'. Skipping."
 				continue
 			fi
-			cp "$repofile" "$homefile"
+			reposysfile="$repofile.$sysname"
+			cat "$repofile" "$reposysfile" >"$homefile" 2>/dev/null
 		done <"$DOT_REPO_DIR/$item/manifest"
 	done
 }
