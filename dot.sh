@@ -1,8 +1,7 @@
 #!/bin/sh
 
-: ${REPO:=$HOME/Projects/dotfiles}
+: ${DOT_REPO_DIR:=$HOME/Projects/dotfiles}
 progname="${0##*/}"
-
 
 die () {
 	echo "$progname: $1" >&2
@@ -10,36 +9,85 @@ die () {
 }
 
 usage () {
-	echo "usage: $progname {diff|install|pick|update} <item>..." >&2
+	echo "usage: $progname {diff|install|pick|update} [<item>...]" >&2
 	exit 0
 }
 
-
-diff () {
-	git diff "$@"
+cmd_diff () {
+	for item
+	do
+		while read repopath homepath
+		do
+			repopath="$DOT_REPO_DIR/$repopath"
+			homepath="$HOME/$homepath"
+			git diff "$repopath" "$homepath"
+		done <"$DOT_REPO_DIR/$item/manifest"
+	done
 }
 
-install () {
-	test -r "$1" || die "cannot read file '$1'"
-	test -e "$2" && die "file '$2' already exists"
-
-	mkdir -p "${2%/*}"
-	cp "$1" "$2"
+cmd_install () {
+	for item
+	do
+		while read repopath homepath
+		do
+			repopath="$DOT_REPO_DIR/$repopath"
+			homepath="$HOME/$homepath"
+			if test ! -r "$repopath"
+			then
+				echo "cannot read file '$repopath'. Skipping." >&2
+				continue
+			fi
+			if test -e "$homepath"
+			then
+				echo "file '$homepath' already exists. Skipping." >&2
+				continue
+			fi
+			mkdir -p "${homepath%/*}"
+			cp "$repopath" "$homepath"
+		done <"$DOT_REPO_DIR/$item/manifest"
+	done
 }
 
-pick () {
-	test -r "$2" || die "cannot read file '$2'"
-
-	cp "$2" "$1"
+cmd_pick () {
+	for item
+	do
+		while read repopath homepath
+		do
+			repopath="$DOT_REPO_DIR/$repopath"
+			homepath="$HOME/$homepath"
+			# At least `dirname "$repopath"` should exist,
+			# since we can read the manifest from it.
+			if ! test -r "$homepath"
+			then
+				echo "cannot read file '$homepath'. Skipping." >&2
+				continue
+			fi
+			cp "$homepath" "$repopath"
+		done <"$DOT_REPO_DIR/$item/manifest"
+	done
 }
 
-update () {
-	test -r "$1" || die "cannot read file '$1'"
-	test -w "$2" || die "cannot write file '$2'"
-
-	cp "$1" "$2"
+cmd_update () {
+	for item
+	do
+		while read repopath homepath
+		do
+			repopath="$DOT_REPO_DIR/$repopath"
+			homepath="$HOME/$homepath"
+			if test ! -r "$repopath"
+			then
+				echo "cannot read file '$repopath'. Skipping." >&2
+				continue
+			fi
+			if test ! -w "$homepath"
+			then
+				echo "cannot write file '$homepath'. Skipping." >&2
+				continue
+			fi
+			cp "$repopath" "$homepath"
+		done <"$DOT_REPO_DIR/$item/manifest"
+	done
 }
-
 
 case "$1" in
 diff|install|pick|update)
@@ -54,10 +102,11 @@ diff|install|pick|update)
 	;;
 esac
 
-for item
-do
-	while read repo home
-	do
-		$cmd "$REPO/$repo" "$HOME/$home"
-	done <"$REPO/$item/manifest"
-done
+if test $# -eq 0
+then
+	# Simulate the semantics of "$@".
+	allitems=$(basename -a $(ls -d "$DOT_REPO_DIR"/*/))
+	cmd_$cmd $allitems
+else
+	cmd_$cmd "$@"
+fi
