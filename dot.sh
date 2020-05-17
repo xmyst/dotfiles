@@ -20,11 +20,11 @@ usage () {
 cmd_diff () {
 	for item
 	do
-		while read repopath homepath
+		while read repofile homefile
 		do
-			repopath="$DOT_REPO_DIR/$repopath"
-			homepath="$HOME/$homepath"
-			git diff "$repopath" "$homepath"
+			repofile="$DOT_REPO_DIR/$repofile"
+			homefile="$HOME/$homefile"
+			git diff "$repofile" "$homefile"
 		done <"$DOT_REPO_DIR/$item/manifest"
 	done
 }
@@ -32,17 +32,17 @@ cmd_diff () {
 cmd_install () {
 	for item
 	do
-		while read repopath homepath
+		while read repofile homefile
 		do
-			repopath="$DOT_REPO_DIR/$repopath"
-			homepath="$HOME/$homepath"
-			if test -e "$homepath"
+			repofile="$DOT_REPO_DIR/$repofile"
+			homefile="$HOME/$homefile"
+			if test -e "$homefile"
 			then
-				warn "file '$homepath' already exists. Skipping."
+				warn "file '$homefile' already exists. Skipping."
 				continue
 			fi
-			mkdir -p "${homepath%/*}"
-			cp "$repopath" "$homepath"
+			mkdir -p "${homefile%/*}"
+			cp "$repofile" "$homefile"
 		done <"$DOT_REPO_DIR/$item/manifest"
 	done
 }
@@ -50,13 +50,13 @@ cmd_install () {
 cmd_pick () {
 	for item
 	do
-		while read repopath homepath
+		while read repofile homefile
 		do
-			repopath="$DOT_REPO_DIR/$repopath"
-			homepath="$HOME/$homepath"
-			# At least `dirname "$repopath"` should exist,
+			repofile="$DOT_REPO_DIR/$repofile"
+			homefile="$HOME/$homefile"
+			# At least `dirname "$repofile"` should exist,
 			# we are reading the manifest from there.
-			cp "$homepath" "$repopath"
+			cp "$homefile" "$repofile"
 		done <"$DOT_REPO_DIR/$item/manifest"
 	done
 }
@@ -64,16 +64,16 @@ cmd_pick () {
 cmd_update () {
 	for item
 	do
-		while read repopath homepath
+		while read repofile homefile
 		do
-			repopath="$DOT_REPO_DIR/$repopath"
-			homepath="$HOME/$homepath"
-			if test ! -w "$homepath"
+			repofile="$DOT_REPO_DIR/$repofile"
+			homefile="$HOME/$homefile"
+			if test ! -w "$homefile"
 			then
-				warn "cannot write file '$homepath'. Skipping."
+				warn "cannot write file '$homefile'. Skipping."
 				continue
 			fi
-			cp "$repopath" "$homepath"
+			cp "$repofile" "$homefile"
 		done <"$DOT_REPO_DIR/$item/manifest"
 	done
 }
