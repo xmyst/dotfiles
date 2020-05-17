@@ -4,6 +4,7 @@
 	co = checkout
 	di = diff
 	lg = log -n10 --graph --oneline
+	ln = log --graph --oneline
 	ls = ls-files
 	st = status
 [diff]
