@@ -1,0 +1,8 @@
+set autoindent
+set extended
+set filec=\	
+set iclower
+set ruler
+set searchincr
+set shiftwidth=4
+set showmode
