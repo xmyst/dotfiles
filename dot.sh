@@ -1,6 +1,6 @@
 #!/bin/sh
 
-: ${DOT_REPO_DIR:=$HOME/Projects/dotfiles}
+: ${DOT_REPO_DIR:=$HOME/src/dotfiles}
 progname="${0##*/}"
 sysname=$(uname | tr "[:upper:]" "[:lower:]")
 
