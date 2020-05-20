@@ -18,7 +18,10 @@ usage () {
 	exit 0
 }
 
-cmd_diff () {
+foreach () {
+	expr="$1"
+	shift
+
 	for item
 	do
 		while read repofile homefile
@@ -26,66 +29,54 @@ cmd_diff () {
 			repofile="$DOT_REPO_DIR/$repofile"
 			homefile="$HOME/$homefile"
 			reposysfile="$repofile.$sysname"
-			cat "$repofile" "$reposysfile" 2>/dev/null | git diff --no-index - "$homefile"
+			eval "$expr"
 		done <"$DOT_REPO_DIR/$item/manifest"
 	done
+}
+
+cmd_diff () {
+	foreach '
+		cat "$repofile" "$reposysfile" 2>/dev/null |
+		git diff --no-index - "$homefile"
+	' "$@"
 }
 
 cmd_install () {
-	for item
-	do
-		while read repofile homefile
-		do
-			repofile="$DOT_REPO_DIR/$repofile"
-			homefile="$HOME/$homefile"
-			if test -e "$homefile"
-			then
-				warn "file '$homefile' already exists. Skipping."
-				continue
-			fi
-			reposysfile="$repofile.$sysname"
-			mkdir -p "${homefile%/*}"
-			cat "$repofile" "$reposysfile" >"$homefile" 2>/dev/null
-		done <"$DOT_REPO_DIR/$item/manifest"
-	done
+	foreach '
+		if test -e "$homefile"
+		then
+			warn "file '"'\$homefile'"' already exists. Skipping."
+			continue
+		fi
+		mkdir -p "${homefile%/*}"
+		cat "$repofile" "$reposysfile" >"$homefile" 2>/dev/null
+	' "$@"
 }
 
 cmd_pick () {
-	for item
-	do
-		while read repofile homefile
-		do
-			repofile="$DOT_REPO_DIR/$repofile"
-			homefile="$HOME/$homefile"
-			# At least `dirname "$repofile"` should exist,
-			# we are reading the manifest from there.
-			if ls "$repofile".* 2>/dev/null >&2
-			then
-				warn "file '$repofile' has system-specific part(s)."
-				warn "\tThose are not supported yet. Skipping."
-			else
-				cp "$homefile" "$repofile"
-			fi
-		done <"$DOT_REPO_DIR/$item/manifest"
-	done
+	foreach '
+		# At least `dirname $repofile` should exist,
+		# we are reading the manifest from there.
+
+		if ls "$repofile".* 2>/dev/null >&2
+		then
+			warn "file '"'\$repofile'"' has system-specific part(s)."
+			warn "\tThose are not supported yet. Skipping."
+		else
+			cp "$homefile" "$repofile"
+		fi
+	' "$@"
 }
 
 cmd_update () {
-	for item
-	do
-		while read repofile homefile
-		do
-			repofile="$DOT_REPO_DIR/$repofile"
-			homefile="$HOME/$homefile"
-			if test ! -w "$homefile"
-			then
-				warn "cannot write file '$homefile'. Skipping."
-				continue
-			fi
-			reposysfile="$repofile.$sysname"
-			cat "$repofile" "$reposysfile" >"$homefile" 2>/dev/null
-		done <"$DOT_REPO_DIR/$item/manifest"
-	done
+	foreach '
+		if test ! -w "$homefile"
+		then
+			warn "cannot write file '"'\$homefile'"'. Skipping."
+			continue
+		fi
+		cat "$repofile" "$reposysfile" >"$homefile" 2>/dev/null
+	' "$@"
 }
 
 case "$1" in
