@@ -5,12 +5,12 @@ progname="${0##*/}"
 sysname=$(uname | tr "[:upper:]" "[:lower:]")
 
 die () {
-	echo "$progname: $1" >&2
+	echo "$progname: $@" >&2
 	exit 1
 }
 
 warn () {
-	echo "$progname: $1" >&2
+	echo "$progname: $@" >&2
 }
 
 usage () {
