@@ -1,7 +1,7 @@
 #!/bin/sh
 
 : ${DOT_REPO_DIR:=$HOME/src/dotfiles}
-progname="${0##*/}"
+progname=${0##*/}
 sysname=$(uname | tr "[:upper:]" "[:lower:]")
 
 die () {
@@ -19,7 +19,7 @@ usage () {
 }
 
 foreach () {
-	expr="$1"
+	expr=$1
 	shift
 
 	for item
@@ -29,7 +29,7 @@ foreach () {
 			repofile="$DOT_REPO_DIR/$repofile"
 			homefile="$HOME/$homefile"
 			reposysfile="$repofile.$sysname"
-			eval "$expr"
+			eval $expr
 		done <"$DOT_REPO_DIR/$item/manifest"
 	done
 }
@@ -58,7 +58,7 @@ cmd_pick () {
 		# At least `dirname $repofile` should exist,
 		# we are reading the manifest from there.
 
-		if ls "$repofile".* 2>/dev/null >&2
+		if ls "$repofile".* >/dev/null 2>/dev/null
 		then
 			warn "file '"'\$repofile'"' has system-specific part(s)."
 			warn "\tThose are not supported yet. Skipping."
@@ -79,7 +79,7 @@ cmd_update () {
 	' "$@"
 }
 
-case "$1" in
+case $1 in
 diff|install|pick|update)
 	cmd=$1
 	shift
