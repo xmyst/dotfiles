@@ -36,8 +36,11 @@ foreach () {
 
 cmd_diff () {
 	foreach '
-		cat "$repofile" "$reposysfile" 2>/dev/null |
-		git diff --no-index - "$homefile"
+		if test -r "$homefile"
+		then
+			cat "$repofile" "$reposysfile" 2>/dev/null |
+			git diff --no-index - "$homefile"
+		fi
 	' "$@"
 }
 
