@@ -9,13 +9,13 @@ die () {
 	exit 1
 }
 
-warn () {
-	echo "$progname: $@" >&2
-}
-
 usage () {
 	echo "usage: $progname {diff|install|pick|update} [<item>...]" >&2
 	exit 0
+}
+
+warn () {
+	echo "$progname: $@" >&2
 }
 
 foreach () {
@@ -61,7 +61,7 @@ cmd_pick () {
 		if ls "$repofile".* >/dev/null 2>/dev/null
 		then
 			warn "file '"'\$repofile'"' has system-specific part(s)."
-			warn "\tThose are not supported yet. Skipping."
+			warn "\tThose are not supported. Skipping."
 		else
 			cp "$homefile" "$repofile"
 		fi
