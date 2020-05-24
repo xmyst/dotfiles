@@ -29,7 +29,7 @@ foreach () {
 			repofile="$DOT_REPO_DIR/$repofile"
 			homefile="$HOME/$homefile"
 			reposysfile="$repofile.$sysname"
-			eval $expr
+			eval "$expr"
 		done <"$DOT_REPO_DIR/$item/manifest"
 	done
 }
