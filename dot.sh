@@ -18,6 +18,7 @@ warn () {
 	echo "$progname: $@" >&2
 }
 
+# foreach <expr> [<item>...] -- eval <expr> for each file of each <item>
 foreach () {
 	expr=$1
 	shift
@@ -36,6 +37,8 @@ foreach () {
 
 cmd_diff () {
 	foreach '
+		# If the file is not available, consider the entire item
+		# as not installed.
 		if test -r "$homefile"
 		then
 			cat "$repofile" "$reposysfile" 2>/dev/null |
@@ -58,8 +61,8 @@ cmd_install () {
 
 cmd_pick () {
 	foreach '
-		# At least `dirname $repofile` should exist,
-		# we are reading the manifest from there.
+		# At least `dirname $repofile` should exist if we
+		# are reading the manifest from it.
 
 		if ls "$repofile".* >/dev/null 2>/dev/null
 		then
