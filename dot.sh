@@ -68,9 +68,9 @@ cmd_pick () {
 		then
 			warn "file '"'\$repofile'"' has system-specific part(s)."
 			warn "\tThose are not supported. Skipping."
-		else
-			cp "$homefile" "$repofile"
+			continue
 		fi
+		cp "$homefile" "$repofile"
 	' "$@"
 }
 
