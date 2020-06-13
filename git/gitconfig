@@ -11,6 +11,8 @@
 	st = status -su
 [diff]
 	algorithm = histogram
+[pull]
+	ff = only
 [transfer]
 	fsckObjects = true
 [user]
