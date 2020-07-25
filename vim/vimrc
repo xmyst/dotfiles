@@ -31,9 +31,18 @@ inoremap jj <Esc>
 " Yank from the cursor to the EOL (same as C and D).
 nnoremap Y y$
 
-augroup vimrc
+augroup Always
   au!
   au BufWritePre * %s/\s\+$//e  " Delete trailing whitespace.
 augroup END
 
-" Vim: set et sw=2:
+augroup Haskell
+  au!
+  au FileType cabal setl et sw=2  " Use the default Cabal's indentation style.
+  au FileType haskell setl et sw=4  " Use the default Haskell's indentation style.
+augroup end
+
+augroup Vim
+  au!
+  au FileType vim setl et sw=2  " Use the default Vim script's indentation style.
+augroup end
