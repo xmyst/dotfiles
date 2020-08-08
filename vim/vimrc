@@ -4,7 +4,7 @@ if !has('gui_running')
   set background=dark  " The terminal's background is (almost) always dark.
 endif
 
-set backspace=2  " Backspace over everything.
+let &backspace = v:versionlong < 8020590 ? 2 : 3  " Backspace over everything.
 set guioptions=acegim  " :help 'guioptions'
 set hlsearch  " Highlight all matches when there is a search pattern.
 set ignorecase smartcase  " Ignore case in patterns unless they contain caps.
