@@ -42,7 +42,7 @@ augroup Haskell
   au FileType haskell setl et sw=4  " Use the default Haskell's indentation style.
 augroup END
 
-augroup Vim
+augroup VimL
   au!
-  au FileType vim setl et sw=2  " Use the default Vim script's indentation style.
+  au FileType vim setl et sw=2  " Use the default VimL's indentation style.
 augroup END
