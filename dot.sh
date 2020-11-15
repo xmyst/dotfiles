@@ -61,8 +61,8 @@ cmd_install () {
 
 cmd_pick () {
 	foreach '
-		# At least `dirname $repofile` should exist if we
-		# are reading the manifest from it.
+		# Assume `dirname $repofile` exists.
+		# We are reading the manifest from it.
 
 		if ls "$repofile".* >/dev/null 2>/dev/null
 		then
