@@ -36,6 +36,11 @@ augroup Always
   au BufWritePre * %s/\s\+$//e  " Delete trailing whitespace.
 augroup END
 
+augroup Java
+  au!
+  au FileType java setl et sw=4  " Use the default Java's indentation style.
+augroup END
+
 augroup Haskell
   au!
   au FileType cabal setl et sw=2  " Use the default Cabal's indentation style.
