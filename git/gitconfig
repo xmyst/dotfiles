@@ -9,6 +9,7 @@
 	ls = ls-files
 	re = reset --hard
 	st = status -su
+	sw = switch
 [diff]
 	algorithm = histogram
 [pull]
