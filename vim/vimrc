@@ -38,16 +38,22 @@ augroup END
 
 augroup Java
   au!
-  au FileType java setl et sw=4  " Use the default Java's indentation style.
+  au FileType java setl et sw=4  " Setup the indentation style.
+augroup END
+
+augroup Markdown
+  au!
+  au FileType markdown setl et sw=4  " Setup the indentation style.
 augroup END
 
 augroup Haskell
   au!
-  au FileType cabal setl et sw=2  " Use the default Cabal's indentation style.
-  au FileType haskell setl et sw=4  " Use the default Haskell's indentation style.
+  " Setup the indentation style.
+  au FileType cabal setl et sw=2
+  au FileType haskell setl et sw=4
 augroup END
 
 augroup VimL
   au!
-  au FileType vim setl et sw=2  " Use the default VimL's indentation style.
+  au FileType vim setl et sw=2  " Setup the indentation style.
 augroup END
