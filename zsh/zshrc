@@ -4,6 +4,7 @@ PS1='%n@%m:%2~%# '
 
 alias L='less -Ss'
 alias m='more -Ss'
+alias v='view'
 
 alias ls='ls -F'
 alias ll='ls -l'
